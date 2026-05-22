@@ -1,4 +1,7 @@
 const express = require('express');
+const dns = require('dns');
+
+dns.setDefaultResultOrder('ipv4first');
 const app = express();
 const userModel = require("./models/user");
 const cookieParser = require('cookie-parser');
@@ -7,12 +10,18 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const upload = require("./config/multerconfig");
 const crypto = require("crypto");
-const path = require("path"); 
+const path = require("path");
+const mongoose = require("mongoose");
+require("dotenv").config(); 
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,"public")));
 app.use(cookieParser());
+console.log(process.env.DB_URI);
+mongoose.connect(process.env.DB_URI)
+.then(() => console.log("MongoDB Connected"))
+.catch((err) => console.log(err));
 
 
 
